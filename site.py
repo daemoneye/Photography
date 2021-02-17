@@ -4,6 +4,7 @@ import os
 import sys
 from PIL import Image
 
+
 class PHOTO:
     def __init__(self):
         self.image_name = ""
@@ -40,7 +41,7 @@ class PHOTO:
             os.mkdir(self.html_filepath)
 
         exif_info_list = ['File_Name', 'Camera_Model_Name', 'Aperture', 'ISO', 'Shutter_Speed', 'Lens_ID', 'Focal_Length', 'Shooting_Mode']
-        
+
         HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
         FOOTER = "</body>\n</html>"
         IMG = "<div class=\"images\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
@@ -55,13 +56,14 @@ class PHOTO:
             DATA += self.exif_data[each]
             DATA += "</td>\n</tr>"
         DATA += "</table>\n</div>"
-        
+
         f = open(self.html_filepath + self.image_name.split('.')[0] + ".html", 'w')
         f.write(HEADER + IMG + DATA + FOOTER)
         f.close()
 
     def add_to_index(self):
         return "<div class=\"image\"><a href=\"" + self.html_filepath.split('/')[5] + "/" + self.html_filepath.split('/')[6] + "/" + self.image_name.split('.')[0] + ".html" + "\" /><img src=\"" + self.thumbnail_filepath + self.image_name + "\" /></a><p>" + self.image_name + "</p></div>\n"
+
 
 def get_args():
     parser = argparse.ArgumentParser(description="Code generator for https://pics.daemo.nz")
@@ -74,6 +76,7 @@ def get_args():
                         action='store_true',
                         help="Display version and exit")
     return parser.parse_args()
+
 
 if __name__ == "__main__":
     args = get_args()

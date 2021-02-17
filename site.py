@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # - Any minor changes bump the minor number
     # - Any major changes (rewrites or majcor logic changes) bump the major number
     # - Too high (above 30) minor changes bumps the major version and minor version is reset to 0.
-    version = 3.4
+    version = 3.5
 
     if args.version:
         print("site.py " + str(version))
@@ -113,7 +113,6 @@ if __name__ == "__main__":
                         print("\t[-] Adding image to index page")
                     tmp.generate_html()
                     BODY = BODY + tmp.add_to_index()
-
 
     BODY += "</body>"
     f = open(image_filepath + "/index.html", "w")

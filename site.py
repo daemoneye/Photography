@@ -92,17 +92,17 @@ if __name__ == "__main__":
         if "thumbnail" not in subdir and not subdir.endswith("html"):
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
-                    if args.verbose == True:
+                    if args.verbose:
                         print("[+] Working on image " + images)
                     tmp = PHOTO()
                     tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/")
-                    if args.verbose == True:
+                    if args.verbose:
                         print("\t[-] Getting EXIF data")
                     tmp.set_exif_data()
-                    if args.verbose == True:
+                    if args.verbose:
                         print("\t[-] Generating thumbnail")
                     tmp.create_thumbnail()
-                    if args.verbose == True:
+                    if args.verbose:
                         print("\t[-] Adding image to index page")
                     tmp.generate_html()
                     BODY = BODY + tmp.add_to_index()

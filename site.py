@@ -113,8 +113,8 @@ if __name__ == "__main__":
                         print("\t[-] Adding image to index page")
                     tmp.generate_html()
                     BODY = BODY + tmp.add_to_index()
-
     BODY += "</body>"
+
     f = open(image_filepath + "/index.html", "w")
     f.write(HEADER + BODY + FOOTER)
     f.close()

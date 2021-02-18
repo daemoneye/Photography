@@ -14,3 +14,6 @@ The version set in code gets updated when:
 - Minor changes cause a minor version update.
 - When the minor version hits 30, it gets reset to 0 and the major version gets incremented.
 - Major changes, such as a logical change, cause the major version to increment.
+
+# styles.css
+For now, we just need some formatting for the images. Any format changes will be added here.

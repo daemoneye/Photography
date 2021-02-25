@@ -45,16 +45,16 @@ class PHOTO:
         HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
         FOOTER = "</body>\n</html>"
         IMG = "<div class=\"images\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
-        DATA = "<div class=\"exif\">\n<table border=\"1\">\n"
+        DATA = "<div class=\"exif\">\n<table border=\"1\">\n<tr>\n"
         for each in exif_info_list:
-            DATA += "<tr>\n<td>"
-            DATA += each.replace('_', ' ')
+            DATA += "<td>" + each + "</td>\n"
+        DATA += "</tr>\n<tr>\n"
+        for each in exif_info_list:
+            DATA += "<td>"
             if each == 'Aperture':
-                DATA += "</td><td>f/"
-            else:
-                DATA += "</td><td>"
+                DATA += "f/"
             DATA += self.exif_data[each]
-            DATA += "</td>\n</tr>"
+            DATA += "</td>\n"
         DATA += "</table>\n</div>"
 
         f = open(self.html_filepath + self.image_name.split('.')[0] + ".html", 'w')
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # - Any minor changes bump the minor number
     # - Any major changes (rewrites or majcor logic changes) bump the major number
     # - Too high (above 30) minor changes bumps the major version and minor version is reset to 0.
-    version = 3.5
+    version = 3.6
 
     if args.version:
         print("site.py " + str(version))

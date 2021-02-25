@@ -28,11 +28,12 @@ class PHOTO:
             self.exif_data[key] = value
 
     def create_thumbnail(self):
+        thumbnail_division = 25
         if not os.path.exists(self.image_filepath + "thumbnails/"):
             os.mkdir(self.image_filepath + "thumbnails/")
         im = Image.open(self.image_filepath + self.image_name)
         width, height = im.size
-        MAX_SIZE = (int(width/10), int(height/10))
+        MAX_SIZE = (int(width/thumbnail_division), int(height/thumbnail_division))
         im.thumbnail(MAX_SIZE)
         im.save(self.image_filepath + "thumbnails/" + self.image_name, "JPEG")
 
@@ -84,7 +85,7 @@ if __name__ == "__main__":
     # - Any minor changes bump the minor number
     # - Any major changes (rewrites or majcor logic changes) bump the major number
     # - Too high (above 30) minor changes bumps the major version and minor version is reset to 0.
-    version = 3.6
+    version = 3.7
 
     if args.version:
         print("site.py " + str(version))

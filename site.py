@@ -44,7 +44,7 @@ class PHOTO:
         exif_info_list = ['File_Name', 'Camera_Model_Name', 'Aperture', 'ISO', 'Shutter_Speed', 'Lens_ID', 'Focal_Length', 'Shooting_Mode']
 
         HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
-        FOOTER = "</body>\n</html>"
+        FOOTER = "</body>\n<p>Copyright 2021 Keane Wolter</p>\n</footer>\n"
         IMG = "<div class=\"images\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
         DATA = "<div class=\"exif\">\n<table border=\"1\">\n<tr>\n"
         for each in exif_info_list:
@@ -85,14 +85,16 @@ if __name__ == "__main__":
     # - Any minor changes bump the minor number
     # - Any major changes (rewrites or majcor logic changes) bump the major number
     # - Too high (above 30) minor changes bumps the major version and minor version is reset to 0.
-    version = 3.7
+    version = 3.9
 
     if args.version:
         print("site.py " + str(version))
         sys.exit()
 
+    photos = []
+
     HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n"
-    FOOTER = "<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</html>"
+    FOOTER = "<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
     BODY = "<body>\n"
 
     image_filepath = "/var/www/html/photos"
@@ -100,22 +102,43 @@ if __name__ == "__main__":
         if "thumbnail" not in subdir and not subdir.endswith("html"):
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
-                    if args.verbose:
-                        print("[+] Working on image " + images)
                     tmp = PHOTO()
                     tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/")
-                    if args.verbose:
-                        print("\t[-] Getting EXIF data")
-                    tmp.set_exif_data()
-                    if args.verbose:
-                        print("\t[-] Generating thumbnail")
-                    tmp.create_thumbnail()
-                    if args.verbose:
-                        print("\t[-] Adding image to index page")
-                    tmp.generate_html()
-                    BODY = BODY + tmp.add_to_index()
+                    photos.append(tmp)
+
+    if args.verbose:
+        print("[+]Sorting photos by name")
+    photos.sort(key=lambda PHOTO: PHOTO.image_name)
+
+    for photo in photos:
+        if args.verbose:
+            print("[+] Working on image " + images)
+        if args.verbose:
+            print("\t[-] Getting EXIF data")
+        photo.set_exif_data()
+        if args.verbose:
+            print("\t[-] Generating thumbnail")
+        photo.create_thumbnail()
+        if args.verbose:
+            print("\t[-] Adding image to index page")
+        photo.generate_html()
+        BODY = BODY + photo.add_to_index()
+
     BODY += "</body>"
 
-    f = open(image_filepath + "/index.html", "w")
+    with open(image_filepath + "/index.html", "w") as f:
     f.write(HEADER + BODY + FOOTER)
-    f.close()
+
+    for subdir, dirs, files in os.walk(image_filepath):
+        if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos'):
+            HEADER_2 = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n</head>\n"
+            FOOTER_2 = "<footer>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
+            BODY_2 = "<body>\n"
+            for images in os.listdir(subdir):
+                if "jpg" in images or "JPG" in images:
+                    tmp = PHOTO()
+                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/")
+                    BODY_2 += tmp.add_to_index().replace('"2', '"../2')
+            BODY_2 += "</body>"
+            with open(subdir + '/index.html', 'w') as f:
+                f.write(HEADER_2 + BODY_2 + FOOTER_2)

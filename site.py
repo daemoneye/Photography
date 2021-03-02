@@ -85,7 +85,7 @@ if __name__ == "__main__":
     # - Any minor changes bump the minor number
     # - Any major changes (rewrites or majcor logic changes) bump the major number
     # - Too high (above 30) minor changes bumps the major version and minor version is reset to 0.
-    version = 3.9
+    version = 3.10
 
     if args.version:
         print("site.py " + str(version))
@@ -107,7 +107,7 @@ if __name__ == "__main__":
                     photos.append(tmp)
 
     if args.verbose:
-        print("[+]Sorting photos by name")
+        print("[+] Sorting photos by name")
     photos.sort(key=lambda PHOTO: PHOTO.image_name)
 
     for photo in photos:
@@ -127,13 +127,15 @@ if __name__ == "__main__":
     BODY += "</body>"
 
     with open(image_filepath + "/index.html", "w") as f:
-    f.write(HEADER + BODY + FOOTER)
+        f.write(HEADER + BODY + FOOTER)
 
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos'):
             HEADER_2 = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n</head>\n"
             FOOTER_2 = "<footer>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
             BODY_2 = "<body>\n"
+            if args.verbose:
+                print("[+] Generating index for " + subdir)
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
                     tmp = PHOTO()

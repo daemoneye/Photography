@@ -92,6 +92,8 @@ if __name__ == "__main__":
         print("site.py " + str(version))
         sys.exit()
 
+    if args.verbise:
+        print("[+] Collecting Images")
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html"):
             for images in os.listdir(subdir):

@@ -81,7 +81,7 @@ def get_args():
 
 if __name__ == "__main__":
     args = get_args()
-    version = 3.10
+    version = 3.11
     image_filepath = "/var/www/html/photos"
     photos = []
     HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n"

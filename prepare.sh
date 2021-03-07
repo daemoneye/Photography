@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 today=`date +%Y-%m-%d`
+pictures="/home/daemoneye/Piuctures"
 
 if [ $# -eq 0 ]
 then
@@ -10,12 +11,12 @@ else
 	SD=$1
 fi
 
-if [ ! -d /home/daemoneye/Pictures/${today} ]
+if [ ! -d ${pictures}/${today} ]
 then
 	echo "Creating directory called ${today}"
-	mkdir /home/daemoneye/Pictures/${today}
+	mkdir ${pictures}/${today}
 fi
 
-mv -v $SD/*CR2 /home/daemoneye/Pictures/${today}
+mv -v $SD/*CR2 ${pictures}/${today}
 
 exit 1

@@ -82,18 +82,16 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
     version = 3.10
+    image_filepath = "/var/www/html/photos"
+    photos = []
+    HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n"
+    FOOTER = "<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
+    BODY = "<body>\n"
 
     if args.version:
         print("site.py " + str(version))
         sys.exit()
 
-    photos = []
-
-    HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n"
-    FOOTER = "<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
-    BODY = "<body>\n"
-
-    image_filepath = "/var/www/html/photos"
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html"):
             for images in os.listdir(subdir):

@@ -81,10 +81,6 @@ def get_args():
 
 if __name__ == "__main__":
     args = get_args()
-    # Version number is updated when:
-    # - Any minor changes bump the minor number
-    # - Any major changes (rewrites or majcor logic changes) bump the major number
-    # - Too high (above 30) minor changes bumps the major version and minor version is reset to 0.
     version = 3.10
 
     if args.version:

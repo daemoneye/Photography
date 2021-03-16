@@ -66,7 +66,7 @@ class PHOTO:
 
         HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
         FOOTER = "</body>\n<p>Copyright 2021 Keane Wolter</p>\n</footer>\n"
-        IMG = "<div class=\"images\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
+        IMG = "<div class=\"images\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\">\n</div>\n"
         DATA = "<div class=\"exif\">\n<table border=\"1\">\n<tr>\n"
         for each in exif_info_list:
             DATA += "<td>" + each + "</td>\n"
@@ -84,7 +84,7 @@ class PHOTO:
         f.close()
 
     def add_to_index(self):
-        return "<div class=\"image\"><a href=\"" + self.html_filepath.split('/')[5] + "/" + self.html_filepath.split('/')[6] + "/" + self.image_name.split('.')[0] + ".html" + "\" /><img src=\"" + self.thumbnail_filepath + self.image_name + "\" /></a><p>" + self.image_name + "</p></div>\n"
+        return "<div class=\"image\"><a href=\"" + self.html_filepath.split('/')[5] + "/" + self.html_filepath.split('/')[6] + "/" + self.image_name.split('.')[0] + ".html" + "\"><img src=\"" + self.thumbnail_filepath + self.image_name + "\"></a><p>" + self.image_name + "</p></div>\n"
 
 
 def get_args():
@@ -122,8 +122,8 @@ if __name__ == "__main__":
     version = 4.0
     image_filepath = "/var/www/html/photos"
     photos = []
-    HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n"
-    FOOTER = "<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
+    HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head lang=\"en\">\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n<meta charset=\"utf-8\">\n</head>\n"
+    FOOTER = "\n<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
     BODY = "<body>\n"
 
     if args.version:
@@ -161,8 +161,8 @@ if __name__ == "__main__":
 
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos') and not subdir.endswith('time'):
-            HEADER_2 = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n</head>\n"
-            FOOTER_2 = "<footer>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
+            HEADER_2 = "<!DOCTYPE HTML>\n\n<html lang=\"en\">\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n<meta charset=\"utf-8\"/>\n</head>\n"
+            FOOTER_2 = "\n<footer>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
             BODY_2 = "<body>\n"
             if args.verbose:
                 print("[+] Generating index for " + subdir)

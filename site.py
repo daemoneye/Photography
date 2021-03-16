@@ -119,7 +119,7 @@ def generate_photo(photo, args):
 
 if __name__ == "__main__":
     args = get_args()
-    version = 4.0
+    version = 4.2
     image_filepath = "/var/www/html/photos"
     photos = []
     HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head lang=\"en\">\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n<meta charset=\"utf-8\">\n</head>\n"
@@ -147,7 +147,8 @@ if __name__ == "__main__":
     for photo in photos:
         if os.path.exists(photo.time_filepath):
             if photo.same_timestamps():
-                pass
+                if args.verbose:
+                    print("[+] Skipping " + photo.image_name + ".")
             else:
                 generate_photo(photo, args)
         else:

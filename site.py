@@ -11,13 +11,22 @@ class PHOTO:
         self.image_filepath = ""
         self.thumbnail_filepath = ""
         self.html_filepath = ""
+        self.time_filepath = ""
         self.exif_data = {}
 
-    def set_data(self, image_name, image_fp, thumbnail_fp, html_fp):
+    def set_data(self, image_name, image_fp, thumbnail_fp, html_fp, time_fp):
         self.image_name = image_name
         self.image_filepath = image_fp
         self.thumbnail_filepath = thumbnail_fp.split('/')[5] + "/" + thumbnail_fp.split('/')[6] + "/"
         self.html_filepath = html_fp
+        self.time_filepath = time_fp
+
+    def set_time_file(self):
+        if not os.path.exists(self.time_filepath):
+            os.mkdir(self.time_filepath)
+        f = open(self.time_filepath + self.image_name.split('.')[0] + ".txt", 'w')
+        f.write(str(os.path.getctime(self.image_filepath + self.image_name)))
+        f.close()
 
     def set_exif_data(self):
         command = "exiftool " + str(self.image_filepath + self.image_name)
@@ -26,6 +35,18 @@ class PHOTO:
             key = each_data[0].strip().replace(" ", "_")
             value = each_data[1].strip()
             self.exif_data[key] = value
+
+    def same_timestamps(self):
+        # print(self.time_filepath + self.image_name.split('.')[0] + ".txt")
+        file_time = 0
+        photo_time = 0
+        if os.path.exists(self.time_filepath + self.image_name.split('.')[0] + '.txt'):
+            with open(self.time_filepath + self.image_name.split('.')[0] + ".txt") as f:
+                file_time = float(f.read())
+            photo_time = os.path.getctime(self.image_filepath + self.image_name)
+            return file_time == photo_time
+        else:
+            return False
 
     def create_thumbnail(self):
         thumbnail_division = 25
@@ -79,9 +100,26 @@ def get_args():
     return parser.parse_args()
 
 
+def generate_photo(photo, args):
+    if args.verbose:
+        print("[+] Working on image " + images)
+    if args.verbose:
+        print("\t[-] Getting EXIF data")
+    photo.set_exif_data()
+    if args.verbose:
+        print("\t[-] Setting time data")
+    photo.set_time_file()
+    if args.verbose:
+        print("\t[-] Generating thumbnail")
+    photo.create_thumbnail()
+    if args.verbose:
+        print("\t[-] Adding image to index page")
+    photo.generate_html()
+
+
 if __name__ == "__main__":
     args = get_args()
-    version = 3.11
+    version = 4.0
     image_filepath = "/var/www/html/photos"
     photos = []
     HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n"
@@ -95,11 +133,11 @@ if __name__ == "__main__":
     if args.verbose:
         print("[+] Collecting Images")
     for subdir, dirs, files in os.walk(image_filepath):
-        if "thumbnail" not in subdir and not subdir.endswith("html"):
+        if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith("time"):
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
                     tmp = PHOTO()
-                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/")
+                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/")
                     photos.append(tmp)
 
     if args.verbose:
@@ -107,17 +145,13 @@ if __name__ == "__main__":
     photos.sort(key=lambda PHOTO: PHOTO.image_name)
 
     for photo in photos:
-        if args.verbose:
-            print("[+] Working on image " + images)
-        if args.verbose:
-            print("\t[-] Getting EXIF data")
-        photo.set_exif_data()
-        if args.verbose:
-            print("\t[-] Generating thumbnail")
-        photo.create_thumbnail()
-        if args.verbose:
-            print("\t[-] Adding image to index page")
-        photo.generate_html()
+        if os.path.exists(photo.time_filepath):
+            if photo.same_timestamps():
+                pass
+            else:
+                generate_photo(photo, args)
+        else:
+            generate_photo(photo, args)
         BODY = BODY + photo.add_to_index()
 
     BODY += "</body>"
@@ -126,7 +160,7 @@ if __name__ == "__main__":
         f.write(HEADER + BODY + FOOTER)
 
     for subdir, dirs, files in os.walk(image_filepath):
-        if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos'):
+        if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos') and not subdir.endswith('time'):
             HEADER_2 = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n</head>\n"
             FOOTER_2 = "<footer>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
             BODY_2 = "<body>\n"
@@ -135,7 +169,7 @@ if __name__ == "__main__":
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
                     tmp = PHOTO()
-                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/")
+                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/")
                     BODY_2 += tmp.add_to_index().replace('"2', '"../2')
             BODY_2 += "</body>"
             with open(subdir + '/index.html', 'w') as f:

@@ -36,7 +36,7 @@ def generate_photo(photo, args):
     photo.generate_html()
 
 
-if __name__ == "__main__":
+def main():
     args = get_args()
     version = 4.2
     image_filepath = "/var/www/html/photos"
@@ -94,3 +94,7 @@ if __name__ == "__main__":
             BODY_2 += "</body>"
             with open(subdir + '/index.html', 'w') as f:
                 f.write(HEADER_2 + BODY_2 + FOOTER_2)
+
+
+if __name__ == "__main__":
+    main()

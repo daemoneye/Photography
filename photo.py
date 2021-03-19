@@ -6,6 +6,8 @@ from PIL import Image
 class PHOTO:
     def __init__(self):
         self.image_name = ""
+        self.html_name = ""
+        self.time_name = ""
         self.image_filepath = ""
         self.thumbnail_filepath = ""
         self.html_filepath = ""
@@ -19,12 +21,14 @@ class PHOTO:
         self.thumbnail_filepath = thumbnail_fp.split('/')[5] + "/" + thumbnail_fp.split('/')[6] + "/"
         self.html_filepath = html_fp
         self.time_filepath = time_fp
+        self.html_name = image_name.split('.')[0] + ".html"
+        self.time_name = image_name.split('.')[0] + ".txt"
 
     def set_time_file(self):
         '''Obtain the create time of the image and store it for future reference'''
         if not os.path.exists(self.time_filepath):
             os.mkdir(self.time_filepath)
-        f = open(self.time_filepath + self.image_name.split('.')[0] + ".txt", 'w')
+        f = open(self.time_filepath + self.time_name, 'w')
         f.write(str(os.path.getctime(self.image_filepath + self.image_name)))
         f.close()
 
@@ -41,8 +45,8 @@ class PHOTO:
         '''Check if the timestamp saved matches the creation timestamp on the file'''
         file_time = 0
         photo_time = 0
-        if os.path.exists(self.time_filepath + self.image_name.split('.')[0] + '.txt'):
-            with open(self.time_filepath + self.image_name.split('.')[0] + ".txt") as f:
+        if os.path.exists(self.time_filepath + self.time_name):
+            with open(self.time_filepath + self.time_name) as f:
                 file_time = float(f.read())
             photo_time = os.path.getctime(self.image_filepath + self.image_name)
             return file_time == photo_time
@@ -81,10 +85,10 @@ class PHOTO:
             DATA += "</td>\n"
         DATA += "</table>\n</div>"
 
-        f = open(self.html_filepath + self.image_name.split('.')[0] + ".html", 'w')
+        f = open(self.html_filepath + self.html_name, 'w')
         f.write(HEADER + IMG + DATA + FOOTER)
         f.close()
 
     def add_to_index(self):
         '''Returns the html for the image index page'''
-        return "<div class=\"image\"><a href=\"" + self.html_filepath.split('/')[5] + "/" + self.html_filepath.split('/')[6] + "/" + self.image_name.split('.')[0] + ".html" + "\"><img src=\"" + self.thumbnail_filepath + self.image_name + "\"></a><p>" + self.image_name + "</p></div>\n"
+        return "<div class=\"image\"><a href=\"" + self.html_filepath.split('/')[5] + "/" + self.html_filepath.split('/')[6] + "/" + self.html_name + "\"><img src=\"" + self.thumbnail_filepath + self.image_name + "\"></a><p>" + self.image_name + "</p></div>\n"

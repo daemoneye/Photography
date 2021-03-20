@@ -38,7 +38,7 @@ def generate_photo(photo, args):
 
 def main():
     args = get_args()
-    version = 4.3
+    version = 4.4
     image_filepath = "/var/www/html/photos"
     photos = []
     HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head lang=\"en\">\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n<meta charset=\"utf-8\">\n</head>\n"

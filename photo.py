@@ -8,21 +8,25 @@ class PHOTO:
         self.image_name = ""
         self.html_name = ""
         self.time_name = ""
+        self.comment_name = ""
         self.image_filepath = ""
         self.thumbnail_filepath = ""
         self.html_filepath = ""
         self.time_filepath = ""
+        self.comment_filepath = ""
         self.exif_data = {}
 
-    def set_data(self, image_name, image_fp, thumbnail_fp, html_fp, time_fp):
+    def set_data(self, image_name, image_fp, thumbnail_fp, html_fp, time_fp, comment_fp):
         '''Set Variables needed for a photo'''
         self.image_name = image_name
         self.image_filepath = image_fp
         self.thumbnail_filepath = thumbnail_fp.split('/')[5] + "/" + thumbnail_fp.split('/')[6] + "/"
         self.html_filepath = html_fp
         self.time_filepath = time_fp
+        self.comment_filepath = comment_fp
         self.html_name = image_name.split('.')[0] + ".html"
         self.time_name = image_name.split('.')[0] + ".txt"
+        self.comment_name = image_name.split('.')[0] + ".txt"
 
     def set_time_file(self):
         '''Obtain the create time of the image and store it for future reference'''
@@ -83,10 +87,18 @@ class PHOTO:
                 DATA += "f/"
             DATA += self.exif_data[each]
             DATA += "</td>\n"
-        DATA += "</table>\n</div>"
+        DATA += "</table>\n</div>\n"
+
+        COMMENT = "<div class=\"comment\">\n"
+        if os.path.exists(comment_filepath + comment_name):
+            f = open(comment_filepath + comment_name)
+            lines = f.readlines()
+            for line in lines:
+                COMMENT = COMMENT + "<p>" + line + "<\p>\n"
+        COMMENT += "</div>\n"
 
         f = open(self.html_filepath + self.html_name, 'w')
-        f.write(HEADER + IMG + DATA + FOOTER)
+        f.write(HEADER + IMG + DATA + COMMENT + FOOTER)
         f.close()
 
     def add_to_index(self):

@@ -75,7 +75,7 @@ class PHOTO:
 
         exif_info_list = ['File_Name', 'Camera_Model_Name', 'Aperture', 'ISO', 'Shutter_Speed', 'Lens_ID', 'Focal_Length', 'Shooting_Mode']
         HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
-        FOOTER = "</body>\n<p>Copyright 2021 Keane Wolter</p>\n</footer>\n"
+        FOOTER = "</body>\n<footer>\n<p>Copyright 2021 Keane Wolter</p>\n</footer>\n"
         IMG = "<div class=\"images\" width=\"100%\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
         DATA = "<div class=\"exif\">\n<table border=\"1\">\n<tr>\n"
         for each in exif_info_list:
@@ -90,8 +90,8 @@ class PHOTO:
         DATA += "</table>\n</div>\n"
 
         COMMENT = "<div class=\"comment\">\n"
-        if os.path.exists(comment_filepath + comment_name):
-            f = open(comment_filepath + comment_name)
+        if os.path.exists(self.comment_filepath + self.comment_name):
+            f = open(self.comment_filepath + self.comment_name)
             lines = f.readlines()
             for line in lines:
                 COMMENT = COMMENT + "<p>" + line + "<\p>\n"

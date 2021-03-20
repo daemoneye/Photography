@@ -56,7 +56,7 @@ def main():
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
                     tmp = PHOTO()
-                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/")
+                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/", subdir + "/comments/")
                     photos.append(tmp)
 
     if args.verbose:
@@ -89,7 +89,7 @@ def main():
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
                     tmp = PHOTO()
-                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/")
+                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/", subdir + "/comments/")
                     BODY_2 += tmp.add_to_index().replace('"2', '"../2')
             BODY_2 += "</body>"
             with open(subdir + '/index.html', 'w') as f:

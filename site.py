@@ -25,6 +25,7 @@ def generate_photo(photo, args):
     if args.verbose:
         print("\t[-] Getting EXIF data")
     photo.set_exif_data()
+    photo.resize()
     if args.verbose:
         print("\t[-] Setting time data")
     photo.set_time_file()
@@ -54,10 +55,11 @@ def main():
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith("time"):
             for images in os.listdir(subdir):
-                if "jpg" in images or "JPG" in images:
-                    tmp = PHOTO()
-                    tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/", subdir + "/comments/")
-                    photos.append(tmp)
+                if "resize" not in images:
+                    if "jpg" in images or "JPG" in images:
+                        tmp = PHOTO()
+                        tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/", subdir + "/comments/")
+                        photos.append(tmp)
 
     if args.verbose:
         print("[+] Sorting photos by name")

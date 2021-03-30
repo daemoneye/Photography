@@ -6,6 +6,7 @@ from PIL import Image
 class PHOTO:
     def __init__(self):
         self.image_name = ""
+        self.image_resize = ""
         self.html_name = ""
         self.time_name = ""
         self.comment_name = ""
@@ -24,9 +25,21 @@ class PHOTO:
         self.html_filepath = html_fp
         self.time_filepath = time_fp
         self.comment_filepath = comment_fp
+        self.image_resize = image_name.split('.')[0] + "_resize.jpg"
         self.html_name = image_name.split('.')[0] + ".html"
         self.time_name = image_name.split('.')[0] + ".txt"
         self.comment_name = image_name.split('.')[0] + ".txt"
+
+    def resize(self):
+        '''Make the image have a max size of 1024'''
+        im = Image.open(self.image_filepath + self.image_name)
+        width, height = im.size
+        if height > 1024:
+            width = (height / 1024) * width
+            height = 1024
+        MAX_SIZE = (int(width), int(height))
+        im.thumbnail(MAX_SIZE)
+        im.save(self.image_filepath + self.image_resize, "JPEG")
 
     def set_time_file(self):
         '''Obtain the create time of the image and store it for future reference'''
@@ -76,7 +89,7 @@ class PHOTO:
         exif_info_list = ['File_Name', 'Camera_Model_Name', 'Aperture', 'ISO', 'Shutter_Speed', 'Lens_ID', 'Focal_Length', 'Shooting_Mode']
         HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
         FOOTER = "</body>\n<footer>\n<p>Copyright 2021 Keane Wolter</p>\n</footer>\n"
-        IMG = "<div class=\"images\" width=\"100%\">\n<img src=\"../" + self.image_name + "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
+        IMG = "<div class=\"images\" width=\"100%\">\n<img src=\"../" + self.image_resize+ "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
         DATA = "<div class=\"exif\">\n<table border=\"1\">\n<tr>\n"
         for each in exif_info_list:
             DATA += "<td>" + each + "</td>\n"

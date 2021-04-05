@@ -41,9 +41,11 @@ def main():
     args = get_args()
     version = 4.4
     image_filepath = "/var/www/html/photos"
+    name = "Victoria Wolter"
+    year = "2021"
     photos = []
     HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head lang=\"en\">\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n<meta charset=\"utf-8\">\n</head>\n"
-    FOOTER = "\n<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
+    FOOTER = "\n<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright " + year + " " + name + "</p>\n</footer>\n</html>"
     BODY = "<body>\n"
 
     if args.version:
@@ -84,7 +86,7 @@ def main():
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos') and not subdir.endswith('time'):
             HEADER_2 = "<!DOCTYPE HTML>\n\n<html lang=\"en\">\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n<meta charset=\"utf-8\"/>\n</head>\n"
-            FOOTER_2 = "\n<footer>\n<p>Image Copyright 2021 Keane Wolter</p>\n</footer>\n</html>"
+            FOOTER_2 = "\n<footer>\n<p>Image Copyright " + year + " " + name + "</p>\n</footer>\n</html>"
             BODY_2 = "<body>\n"
             if args.verbose:
                 print("[+] Generating index for " + subdir)

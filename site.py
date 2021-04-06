@@ -19,21 +19,21 @@ def get_args():
     return parser.parse_args()
 
 
+def log_me(args, message):
+    if args.verbose:
+        print(message)
+
+
 def generate_photo(photo, args):
-    if args.verbose:
-        print("[+] Working on image " + photo.image_name)
-    if args.verbose:
-        print("\t[-] Getting EXIF data")
+    log_me(args, "[+] Working on image " + photo.image_name)
+    log_me(args, "\t[-] Getting EXIF data")
     photo.set_exif_data()
     photo.resize()
-    if args.verbose:
-        print("\t[-] Setting time data")
+    log_me(args, "\t[-] Setting time data")
     photo.set_time_file()
-    if args.verbose:
-        print("\t[-] Generating thumbnail")
+    log_me(args, "\t[-] Generating thumbnail")
     photo.create_thumbnail()
-    if args.verbose:
-        print("\t[-] Adding image to index page")
+    log_me(args, "\t[-] Adding image to index page")
     photo.generate_html()
 
 
@@ -52,8 +52,7 @@ def main():
         print("site.py " + str(version))
         sys.exit()
 
-    if args.verbose:
-        print("[+] Collecting Images")
+    log_me(args, "[+] Collecting Images")
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith("time"):
             for images in os.listdir(subdir):
@@ -63,15 +62,13 @@ def main():
                         tmp.set_data(images, subdir + "/", subdir + "/thumbnails/", subdir + "/html/", subdir + "/time/", subdir + "/comments/")
                         photos.append(tmp)
 
-    if args.verbose:
-        print("[+] Sorting photos by name")
+    log_me(args, "[+] Sorting photos by name")
     photos.sort(key=lambda PHOTO: PHOTO.image_name)
 
     for photo in photos:
         if os.path.exists(photo.time_filepath):
             if photo.same_timestamps():
-                if args.verbose:
-                    print("[+] Skipping " + photo.image_name + ".")
+                log_me(args, "[+] Skipping " + photo.image_name + ".")
             else:
                 generate_photo(photo, args)
         else:
@@ -88,8 +85,7 @@ def main():
             HEADER_2 = "<!DOCTYPE HTML>\n\n<html lang=\"en\">\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n<meta charset=\"utf-8\"/>\n</head>\n"
             FOOTER_2 = "\n<footer>\n<p>Image Copyright " + year + " " + name + "</p>\n</footer>\n</html>"
             BODY_2 = "<body>\n"
-            if args.verbose:
-                print("[+] Generating index for " + subdir)
+            log_me(args, "[+] Generating index for " + subdir)
             for images in os.listdir(subdir):
                 if "jpg" in images or "JPG" in images:
                     tmp = PHOTO()

@@ -87,7 +87,7 @@ class PHOTO:
             os.mkdir(self.html_filepath)
 
         exif_info_list = ['File_Name', 'Camera_Model_Name', 'Aperture', 'ISO', 'Shutter_Speed', 'Lens_ID', 'Focal_Length', 'Shooting_Mode']
-        HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../styles.css\">\n</head>\n<body>\n"
+        HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head>\n<title>" + self.image_name + "</title>\n<link rel=\"stylesheet\" href=\"../../photos.css\">\n</head>\n<body>\n"
         FOOTER = "</body>\n<footer>\n<p>Copyright 2021 Keane Wolter</p>\n</footer>\n"
         IMG = "<div class=\"images\" width=\"100%\">\n<img src=\"../" + self.image_resize+ "\" id=\"image_canv\" class=\"rotateimg0\" width=\"100%\">\n</div>\n"
         DATA = "<div class=\"exif\">\n<table border=\"1\">\n<tr>\n"

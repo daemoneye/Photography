@@ -44,7 +44,7 @@ def main():
     name = "Victoria Wolter"
     year = "2021"
     photos = []
-    HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head lang=\"en\">\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"styles.css\">\n<meta charset=\"utf-8\">\n</head>\n"
+    HEADER = "<!DOCTYPE HTML>\n\n<html>\n<head lang=\"en\">\n<title>Daemoneye's Photos</title>\n<link rel=\"stylesheet\" href=\"index.css\">\n<meta charset=\"utf-8\">\n</head>\n"
     FOOTER = "\n<footer>\n<p>Script generation version: " + str(version) + "</p>\n<p>Image Copyright " + year + " " + name + "</p>\n</footer>\n</html>"
     BODY = "<body>\n"
 
@@ -82,7 +82,7 @@ def main():
 
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith('photos') and not subdir.endswith('time'):
-            HEADER_2 = "<!DOCTYPE HTML>\n\n<html lang=\"en\">\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../styles.css\">\n<meta charset=\"utf-8\"/>\n</head>\n"
+            HEADER_2 = "<!DOCTYPE HTML>\n\n<html lang=\"en\">\n<head>\n<title>" + subdir + "</title>\n<link rel=\"stylesheet\" href=\"../index.css\">\n<meta charset=\"utf-8\"/>\n</head>\n"
             FOOTER_2 = "\n<footer>\n<p>Image Copyright " + year + " " + name + "</p>\n</footer>\n</html>"
             BODY_2 = "<body>\n"
             log_me(args, "[+] Generating index for " + subdir)

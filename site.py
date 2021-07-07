@@ -52,6 +52,10 @@ def main():
         print("site.py " + str(version))
         sys.exit()
 
+    if os.geteuid() != 0:
+        print("Must be root!")
+        sys.exit()
+
     log_me(args, "[+] Collecting Images")
     for subdir, dirs, files in os.walk(image_filepath):
         if "thumbnail" not in subdir and not subdir.endswith("html") and not subdir.endswith("time"):
